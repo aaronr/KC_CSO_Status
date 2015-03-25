@@ -1,7 +1,7 @@
 import sys
 import os
 import subprocess
-import time
+import time, pytz, datetime
 import csv
 import urllib2
 import pprint
@@ -91,7 +91,8 @@ for row in location:
                                           'properties':{'CSO_TagName':row['CSO_TagName'],
                                                         'DSN':row['DSN'],
                                                         'Name':row['Name'],
-                                                        'Time_stamp':time.strftime("%Y-%m-%d %I:%M:%S %p", time.localtime()),
+                                                        #'Time_stamp':time.strftime("%Y-%m-%d %I:%M:%S %p", time.localtime()),
+                                                        'Time_stamp': datetime.datetime.now(pytz.timezone('US/Pacific')).strftime("%Y-%m-%d %I:%M:%S %p"),
                                                         'Location':"%1.3f , %1.3f" % (float(row["X_COORD"]) ,float(row["Y_COORD"])),
                                                         'CSO_Status':0,'marker-color':'#666',
                                                         'marker-size':'small',
@@ -175,10 +176,12 @@ pprint.pprint(formatted_geojson_data_dict)
 #out_file_fullpath ='/Users/keump/Documents/GitHub/KC_CSO_Status/test_file.geojson' #for Windows 7
 
 # file for public repo for Windows machine
-out_file_fullpath = '/Users/keump/Documents/GitHub/data_display/cso_test_file.geojson'
+#out_file_fullpath = '/Users/keump/Documents/GitHub/data_display/cso_test_file.geojson'
+out_file_fullpath = '/home/projects/data_display/cso_test_file.geojson'
 
 # directory for public repo
-out_file_fullpath_directory = '/Users/keump/Documents/GitHub/data_display'
+#out_file_fullpath_directory = '/Users/keump/Documents/GitHub/data_display'
+out_file_fullpath_directory = '/home/projects/data_display'
 
 # file for public repo for OS machine
 #out_file_fullpath ='/Users/peter/Documents/KC_CSO_Status/test_file.geojson' #for macbook
@@ -195,7 +198,7 @@ subprocess.call(['git', '--git-dir', out_file_fullpath_directory + '/.git',
                 'add', out_file_fullpath])
 subprocess.call(['git', '--git-dir', out_file_fullpath_directory  +'/.git',
                 '--work-tree', out_file_fullpath_directory,
-                'commit', '-a', '-m', '"Data Upload: ' + time.strftime("%Y-%m-%d %I:%M:%S %p", time.localtime()) + '"'])
+                'commit', '-a', '-m', '"Data Upload: ' + datetime.datetime.now(pytz.timezone('US/Pacific')).strftime("%Y-%m-%d %I:%M:%S %p") + '"'])
 subprocess.call(['git', '--git-dir', out_file_fullpath_directory + '/.git',
                 '--work-tree', out_file_fullpath_directory,
                 'push'])
